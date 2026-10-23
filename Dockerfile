@@ -55,6 +55,16 @@ COPY nginx.conf /etc/nginx/http.d/default.conf
 COPY php.ini /usr/local/etc/php/conf.d/99-hemi.ini
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-hemi.conf
 
+# 6. PHP-FPM process manager defaults, sized for a 2 GB host shared with a
+#    queue worker and database (~50 MB per worker => ~600 MB at max_children).
+#    Override at runtime, e.g. `-e PHP_FPM_MAX_CHILDREN=24`.
+ENV PHP_FPM_PM=dynamic \
+    PHP_FPM_MAX_CHILDREN=12 \
+    PHP_FPM_START_SERVERS=3 \
+    PHP_FPM_MIN_SPARE_SERVERS=2 \
+    PHP_FPM_MAX_SPARE_SERVERS=5 \
+    PHP_FPM_MAX_REQUESTS=500
+
 WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
