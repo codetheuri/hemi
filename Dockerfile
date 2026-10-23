@@ -71,7 +71,8 @@ ENV PHP_FPM_PM=dynamic \
     PHP_FPM_START_SERVERS=3 \
     PHP_FPM_MIN_SPARE_SERVERS=2 \
     PHP_FPM_MAX_SPARE_SERVERS=5 \
-    PHP_FPM_MAX_REQUESTS=500
+    PHP_FPM_MAX_REQUESTS=500 \
+    PHP_FPM_DISABLE_FUNCTIONS=exec,passthru,shell_exec,system,proc_open,popen,pcntl_exec,show_source,phpinfo
 
 WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
