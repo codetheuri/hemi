@@ -1,0 +1,3 @@
+# CVE IDs to exclude from the CI vulnerability gate, one per line.
+# Add one only after reviewing it, with a reason and a date to revisit, e.g.:
+# CVE-2026-00000  # not reachable: <reason>. Revisit 2026-12-01.
