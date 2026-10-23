@@ -58,8 +58,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # 4. Configurations
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY nginx.conf /etc/nginx/http.d/default.conf
+COPY health.conf /etc/nginx/http.d/hemi-health.conf
 COPY php.ini /usr/local/etc/php/conf.d/99-hemi.ini
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-hemi.conf
+COPY --chmod=755 healthcheck.sh /usr/local/bin/hemi-healthcheck
 
 # 5. PHP-FPM process manager defaults, sized for a 2 GB host shared with a
 #    queue worker and database (~50 MB per worker => ~600 MB at max_children).
@@ -75,5 +77,8 @@ WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD ["hemi-healthcheck"]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
